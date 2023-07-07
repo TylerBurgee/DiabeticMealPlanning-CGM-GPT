@@ -16,4 +16,7 @@ if __name__ == '__main__':
   # GET DATA FROM PROFILE 1
   data = dh.get_data_by_profile(1)
 
-  dp = DataProcessor(data)
+  dp = DataProcessor()
+
+  interval_avg = dp.get_interval_avg(data)
+  print(interval_avg)
