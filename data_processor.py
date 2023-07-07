@@ -3,7 +3,7 @@ class DataProcessor:
   def __init__(self):
     pass
 
-  def get_interval_avg(self, data, interval):
+  def get_interval_avg(self, data: list, interval: tuple) -> float:
     """Returns the avg blood-glucose level in a given time interval"""
 
 if __name__ == '__main__':
@@ -13,8 +13,8 @@ if __name__ == '__main__':
   filename = 'test_db.csv'
   dh = DataHandler(filename)
 
-  # GET DATA FROM PROFILE 1
-  data = dh.get_data_by_profile(1)
+  # GET DATA FROM A SINGLE DAY
+  data = dh.get_data_by_day(0)
 
   dp = DataProcessor()
 
