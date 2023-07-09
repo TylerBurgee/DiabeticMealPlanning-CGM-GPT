@@ -5,6 +5,7 @@ class DataProcessor:
 
   def get_interval_avg(self, data: list, interval: tuple) -> float:
     """Returns the avg blood-glucose level in a given time interval"""
+    pass
 
 if __name__ == '__main__':
   # IMPORT MODULE
@@ -14,7 +15,7 @@ if __name__ == '__main__':
   dh = DataHandler(filename)
 
   # GET DATA FROM A SINGLE DAY
-  data = dh.get_data_by_day(0)
+  data = dh.get_data_by_day(0, 1)
 
   dp = DataProcessor()
 
