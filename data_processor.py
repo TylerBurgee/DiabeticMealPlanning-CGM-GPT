@@ -27,6 +27,14 @@ class DataProcessor:
 
     return avg
 
+  def get_day_avg(data: list, time_increment=5) -> float:
+    """Returns the average blood-glucose level in a given day"""
+    interval = (0, 1440)
+
+    avg = DataProcessor.get_interval_avg(data, interval, time_increment)
+
+    return avg
+
 if __name__ == '__main__':
   # IMPORT MODULES
   from data_handler import DataHandler
@@ -35,7 +43,10 @@ if __name__ == '__main__':
   dh = DataHandler(filename)
 
   # GET DATA FROM A SINGLE DAY
-  data = dh.get_data_by_day(0, 1)
+  data = dh.get_data_by_day(day=0, profile=1)
 
   interval_avg = DataProcessor.get_interval_avg(data, (10, 20))
-  print(interval_avg)
+  print("Average from minutes 10-20:", interval_avg)
+
+  day_avg = DataProcessor.get_day_avg(data)
+  print("Day average:", day_avg)
