@@ -43,7 +43,7 @@ if __name__ == '__main__':
   dh = DataHandler(filename)
 
   # GET DATA FROM A SINGLE DAY
-  data = dh.get_data_by_day(day=0, profile=1)
+  data = dh.get_data_by_patient(patient=0, profile=1)
 
   interval_avg = DataProcessor.get_interval_avg(data, (10, 20))
   print("Average from minutes 10-20:", interval_avg)
