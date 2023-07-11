@@ -55,13 +55,13 @@ class DataHandler:
         data = self.data[str(profile)]
         return data
 
-    def get_data_by_day(self, day: int, profile: int) -> list:
+    def get_data_by_patient(self, patient: int, profile: int) -> list:
         """
-        Returns data from a given profile on a specified day.
-        Note: the first day is 0.
+        Returns data from a given profile for a specified patient.
+        Note: the first patient is 0.
         """
         all_data = self.get_data_by_profile(profile)
-        day_data = all_data[day]
+        day_data = all_data[patient]
         return day_data
 
 if __name__ == '__main__':
@@ -70,6 +70,6 @@ if __name__ == '__main__':
 
     # GET DATA FROM PROFILE 1
     profile1 = dh.get_data_by_profile(1)
-    
-    for x,day in enumerate(profile1):
-        print('Day #{}:'.format(x), day)
+
+    for x,patient in enumerate(profile1):
+        print('Profile 1, Patient #{}:'.format(x), patient)
