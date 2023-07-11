@@ -7,13 +7,16 @@ class DataProcessor:
   """Class to process synthetic CGM data"""
 
   @staticmethod
-  def get_interval_avg(data: list, interval: tuple) -> float:
+  def get_interval_avg(data: list, interval: tuple, time_increment=5) -> float:
     """
     Returns the average blood-glucose level in a given time interval.
     Lower bound on the interval is inclusive, upper bound is exclusive. 
     Interval values should be multiples of the time_increment variable.
+
+    data: a single day of CGM data in list format.
+    interval: time interval over which the average is to be calculated.
+    time_increment: time in between each CGM reading.
     """
-    time_increment = 5 # TIME BETWEEN EACH CGM READING
     sum_of_readings = 0
     num_of_readings = (interval[1] - interval[0]) / time_increment
 
