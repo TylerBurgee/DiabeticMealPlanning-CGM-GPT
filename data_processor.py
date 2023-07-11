@@ -19,5 +19,5 @@ if __name__ == '__main__':
 
   dp = DataProcessor()
 
-  interval_avg = dp.get_interval_avg(data)
+  interval_avg = dp.get_interval_avg(data, (0, 60))
   print(interval_avg)
