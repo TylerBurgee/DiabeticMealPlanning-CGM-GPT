@@ -38,10 +38,7 @@ class DataProcessor:
     return avg
 
   def draw_patient_graph_day(patient_data) -> None:
-        """
-        Draws a graph of the given patient's CGM readings over the day.
-        Note: the first patient is 0.
-        """
+        """Draws a graph of the given patient's CGM readings over the day"""
         patient_data = [float(datum) for datum in patient_data]
 
         start_time = datetime.strptime('12:00 AM', '%I:%M %p')
