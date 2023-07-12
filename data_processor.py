@@ -2,9 +2,7 @@
 Author: Tyler J. Burgee, Vaageesha Das
 Date: 11 July 2023
 """
-import seaborn as sns
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from datetime import datetime, timedelta
 
 class DataProcessor:
