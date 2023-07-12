@@ -55,30 +55,6 @@ class DataProcessor:
         plt.ylabel('Patient Data')
         plt.show()
 
-        # plt.xticks(time_list)
-        # plt.yticks(patient_data)
-        # git commit -m "updated draw_patient_graph_day, x is to be the time and y is to be the glucose level"
-        # plt.grid()
-
-        # plt.gca().margins(x=0)
-        # plt.gcf().canvas.draw()
-        # tl = plt.gca().get_xticklabels()
-        # maxsize = max([t.get_window_extent().width for t in tl])
-        # m = 0.2  # Inch margin
-        # s = maxsize / plt.gcf().dpi * N + 2 * m
-        # margin = m / plt.gcf().get_size_inches()[0]
-
-        # plt.gcf().subplots_adjust(left=margin, right=1. - margin)
-        # plt.gcf().set_size_inches(s, plt.gcf().get_size_inches()[1])
-
-        # plt.xlabel('Time')
-        # plt.ylabel('CGM Reading')
-        # plt.title('CGM Readings over the Day')
-
-        # plt.yticks(fontsize=8)
-
-        # plt.tight_layout()
-        # plt.show()
 
 
 
