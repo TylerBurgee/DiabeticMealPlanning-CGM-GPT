@@ -38,7 +38,7 @@ class DataProcessor:
     avg = DataProcessor.get_interval_avg(data, interval, time_increment)
 
     return avg
-  
+
   def draw_patient_graph_day(patient_data) -> None:
         """
         Draws a graph of the given patient's CGM readings over the day.
@@ -71,10 +71,10 @@ if __name__ == '__main__':
   patient_data = dh.get_data_by_patient(patient=0, profile=1)
 
   interval_avg = DataProcessor.get_interval_avg(patient_data, (10, 20))
-  print("Average from minutes 10-20:", interval_avg)
+  print("Average blood-glucose from minutes 10-20:", interval_avg)
 
   day_avg = DataProcessor.get_day_avg(patient_data)
-  print("Day average:", day_avg)
+  print("Average blood-glucose for the day:", day_avg)
 
-  day_graph = DataProcessor.draw_patient_graph_day(patient_data)
-  print("Graph drawn", day_graph)
+  # GRAPH PATIENT DATA
+  DataProcessor.draw_patient_graph_day(patient_data)
