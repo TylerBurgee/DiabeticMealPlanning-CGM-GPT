@@ -75,7 +75,6 @@ class DataProcessor:
 
         # plt.xticks(time_list)
         # plt.yticks(patient_data)
-        # git commit -m "updated draw_patient_graph_day, x is to be the time and y is to be the glucose level"
         # plt.grid()
 
         # plt.gca().margins(x=0)
