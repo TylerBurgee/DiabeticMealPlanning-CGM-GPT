@@ -11,23 +11,20 @@ from patient import Patient
 class Main:
 
     def _create_prompt_(patient: object) -> str:
-        prompt = '''
-            Blood-glucose: {} mg/dL. 
-            Last meal: {} hr ago. 
-            Query: Is this safe? 
-            If so, recommend meals for breakfast (If blood-glucose is severely low or high,
-                prioritize quickly raising or lowering blood-sugar levels, respectively, before eating a meal);
-            if not, what should I do (prioritize seeking medical attention over remedies)?
-        '''.format(patient.get_instantaneous_blood_glucose(0), patient.get_last_meal())
+        blood_glucose = 'Blood-glucose: {} mg/dL.\n'.format(patient.get_instantaneous_blood_glucose(0))
+        last_meal = 'Last meal: {} hr ago.\n'.format(patient.get_last_meal())
+        query = 'Query: Is this safe? If so, recommend meals for breakfast (If blood-glucose is severely low or high, prioritize quickly raising or lowering blood-sugar levels,respectively, before eating a meal); if not, what should I do(prioritize seeking medical attention over remedies)?\n'
+
+        prompt = blood_glucose + last_meal + query
 
         if patient.get_dietary_restrictions() is not None:
-            prompt += ' Dietary restrictions: {}.'.format(patient.get_dietary_restrictions())
+            prompt += 'Dietary restrictions: {}.\n'.format(patient.get_dietary_restrictions())
         if patient.get_budget() is not None:
-            prompt += ' Budget: ${}.'.format(str(patient.get_budget()))
+            prompt += 'Budget: ${}.\n'.format(str(patient.get_budget()))
         if patient.get_exercise() is not None:
-            prompt += ' Exercise: {}.'.format(patient.get_exercise())
+            prompt += 'Exercise: {}.\n'.format(patient.get_exercise())
         if patient.get_medication() is not None:
-            prompt += 'Medication: {}.'.format(patient.get_medication())
+            prompt += 'Medication: {}.\n'.format(patient.get_medication())
 
         return prompt
 
@@ -50,7 +47,7 @@ if __name__ == '__main__':
     filename = 'test_db.csv'
     dh = DataHandler(filename)
 
-    healthy_patient = Patient(dh.get_data_by_patient(patient=0, profile=1), last_meal=10)
+    healthy_patient = Patient(dh.get_data_by_patient(patient=0, profile=1), last_meal=10, dietary_restrictions='vegan', budget='20')
 
     prompt = Main._create_prompt_(healthy_patient)
     print(prompt)

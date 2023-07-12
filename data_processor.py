@@ -2,9 +2,7 @@
 Author: Tyler J. Burgee, Vaageesha Das
 Date: 11 July 2023
 """
-import seaborn as sns
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from datetime import datetime, timedelta
 
 class DataProcessor:
@@ -38,43 +36,28 @@ class DataProcessor:
     avg = DataProcessor.get_interval_avg(data, interval, time_increment)
 
     return avg
-  
-  def draw_patient_graph_day(graph_patient: int, graph_profile: int) -> None:
-        """
-        Draws a graph of the given patient's CGM readings over the day.
-        Note: the first patient is 0.
-        """
-        patient_data = dh.get_data_by_patient(patient=graph_patient, profile=graph_profile)
 
-        # start_time = datetime.strptime('12:00', '%H:%M')
-        # time_ticks = [start_time + timedelta(minutes=5 * i) for i in range(len(patient_data))]
+  def draw_patient_graph_day(patient_data) -> None:
+        """Draws a graph of the given patient's CGM readings over the day"""
+        patient_data = [float(datum) for datum in patient_data]
 
-        start_time = datetime.strptime('12:00 PM', '%I:%M %p')
-        time_list = []
+        start_time = datetime.strptime('12:00 AM', '%I:%M %p')
+        times_list = []
         current_time = start_time
 
-        prev = patient_data[0]
         for i in range(len(patient_data)):
-            time_list.append(current_time.strftime('%I:%M %p'))
+            times_list.append(current_time.strftime('%I:%M %p'))
             current_time += timedelta(minutes=5)
-            # if prev > patient_data[i+1]:
-            #   print("LOOK HERE")
-            # prev = patient_data[i+1]
 
-        N = len(patient_data)
-
-        plt.figure(figsize=(12, 6))
-
-        # plt.plot(patient_data)
-
-        sns.scatterplot(x=time_list, y=patient_data)
+        plt.bar(times_list, patient_data)
+        plt.title('Patient Data Over Time')
         plt.xlabel('Time')
         plt.ylabel('Patient Data')
-        plt.title('Patient Data over Time (Seaborn)')
         plt.show()
 
         # plt.xticks(time_list)
         # plt.yticks(patient_data)
+        # git commit -m "updated draw_patient_graph_day, x is to be the time and y is to be the glucose level"
         # plt.grid()
 
         # plt.gca().margins(x=0)
@@ -106,14 +89,14 @@ if __name__ == '__main__':
   filename = 'test_db.csv'
   dh = DataHandler(filename)
 
-  # GET DATA FROM A SINGLE DAY
-  data = dh.get_data_by_patient(patient=0, profile=1)
+  # GET DATA FROM A SINGLE PATIENT (ONE DAY)
+  patient_data = dh.get_data_by_patient(patient=0, profile=1)
 
-  interval_avg = DataProcessor.get_interval_avg(data, (10, 20))
-  print("Average from minutes 10-20:", interval_avg)
+  interval_avg = DataProcessor.get_interval_avg(patient_data, (10, 20))
+  print("Average blood-glucose from minutes 10-20:", interval_avg)
 
-  day_avg = DataProcessor.get_day_avg(data)
-  print("Day average:", day_avg)
+  day_avg = DataProcessor.get_day_avg(patient_data)
+  print("Average blood-glucose for the day:", day_avg)
 
-  day_graph = DataProcessor.draw_patient_graph_day(graph_patient=0, graph_profile=1)
-  print("Graph drawn", day_graph)
+  # GRAPH PATIENT DATA
+  DataProcessor.draw_patient_graph_day(patient_data)
