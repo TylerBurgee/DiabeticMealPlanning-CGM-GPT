@@ -34,6 +34,18 @@ class DataProcessor:
     avg = DataProcessor.get_interval_avg(data, interval, time_increment)
 
     return avg
+  
+  def draw_patient_graph_day(graph_patient: int, graph_profile: int) -> None:
+        """
+        Draws a graph of the given patient's CGM readings over the day.
+        Note: the first patient is 0.
+        """
+        patient_data = dh.get_data_by_patient(patient=graph_patient, profile=graph_profile)
+    
+        for reading in patient_data:
+           print(reading)
+
+
 
 if __name__ == '__main__':
   # IMPORT MODULES
@@ -50,3 +62,6 @@ if __name__ == '__main__':
 
   day_avg = DataProcessor.get_day_avg(data)
   print("Day average:", day_avg)
+
+  day_graph = DataProcessor.draw_patient_graph_day(graph_patient=0, graph_profile=1)
+  print("Graph drawn", day_graph)
