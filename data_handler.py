@@ -34,11 +34,12 @@ class DataHandler:
         keys = []
 
         for line in file:
-            if line[0] not in keys:   #could use set?
+            if line[0] not in keys:
                 keys.append(line[0])
                 day_data = [datum for x,datum in enumerate(line) if x > 0]
                 data[line[0]] = [day_data]
             else:
+                day_data = [datum for x,datum in enumerate(line) if x > 0]
                 data[line[0]].append(day_data)
 
         return data
@@ -63,7 +64,6 @@ class DataHandler:
         all_data = self.get_data_by_profile(profile)
         day_data = all_data[patient]
         return day_data
-    
 
 if __name__ == '__main__':
     # INSTANTIATE DataHandler OBJECT
