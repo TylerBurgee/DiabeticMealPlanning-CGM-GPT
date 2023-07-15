@@ -37,11 +37,11 @@ class DataProcessor:
 
     return avg
 
-  def draw_patient_graph_day(patient_data) -> None:
+  def draw_patient_graph_interval(patient_data, patient_profile, patient_id, start_time, end_time) -> None:
         """Draws a graph of the given patient's CGM readings over the day"""
         patient_data = [float(datum) for datum in patient_data]
 
-        start_time = datetime.strptime('12:00 AM', '%I:%M %p')
+        starting_data_index = "12:00 AM" - start_time
         times_list = []
         current_time = start_time
 
@@ -55,8 +55,10 @@ class DataProcessor:
         plt.ylabel('Patient Data')
         plt.show()
 
-
-
+  def draw_patient_graph_day(patient_data, patient_profile, patient_id):
+     start_time = datetime.strptime('12:00 AM', '%I:%M %p')
+     end_time = datetime.strptime('11:55 AM', '%I:%M %p')
+     DataProcessor.draw_patient_graph_interval(patient_data, patient_profile, patient_id, start_time, end_time)
 
 if __name__ == '__main__':
   # IMPORT MODULES
