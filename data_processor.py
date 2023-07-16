@@ -39,7 +39,10 @@ class DataProcessor:
     return avg
 
   def draw_patient_graph_interval(data: list, interval: tuple, time_increment=5, tick_factor=6) -> None:
-    """Draws a graph of the given patient's CGM readings over a given time interval"""
+    """
+    Draws a graph of the given patient's CGM readings
+    over a given time interval.
+    """
     data = [float(datum) for datum in data]
 
     start_time = datetime.strptime('12:00pm', '%I:%M%p')
@@ -50,9 +53,13 @@ class DataProcessor:
         times_list.append(current_time.strftime('%I:%M\n%p'))
         current_time += timedelta(minutes=time_increment)
 
-    data = data[int(interval[0] / time_increment):int(interval[1] / time_increment)]
-    times_list = times_list[int(interval[0] / time_increment):int(interval[1] / time_increment)]
+    start_time = int(interval[0] / time_increment)
+    end_time = int(interval[1] / time_increment)
 
+    data = data[start_time:end_time]
+    times_list = times_list[start_time:end_time]
+
+    # GRAPH SETUP
     plt.bar(times_list, data)
     plt.title('Patient Data Over Time')
     plt.xlabel('Time')
@@ -82,8 +89,8 @@ if __name__ == '__main__':
   day_avg = DataProcessor.get_day_avg(patient_data)
   print("Average blood-glucose for the day:", day_avg)
 
-  # GRAPH PATIENT DATA OVER 1-HOUR TIME INTERVAL
-  DataProcessor.draw_patient_graph_interval(patient_data, (0, 60))
+  # GRAPH PATIENT DATA OVER 2-HOUR TIME INTERVAL
+  #DataProcessor.draw_patient_graph_interval(patient_data, (0, 120))
 
   # GRAPH PATIENT DATA OVER AN ENTIRE DAY
   DataProcessor.draw_patient_graph_day(patient_data)
