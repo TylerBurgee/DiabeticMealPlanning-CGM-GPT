@@ -52,7 +52,6 @@ class DataProcessor:
 
     data = data[int(interval[0] / time_increment):int(interval[1] / time_increment)]
     times_list = times_list[int(interval[0] / time_increment):int(interval[1] / time_increment)]
-    print(data)
 
     plt.bar(times_list, data)
     plt.title('Patient Data Over Time')
