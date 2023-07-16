@@ -41,13 +41,14 @@ class DataProcessor:
         """Draws a graph of the given patient's CGM readings over the day"""
         patient_data = [float(datum) for datum in patient_data]
 
-        starting_data_index = "12:00 AM" - start_time
         times_list = []
         current_time = start_time
 
-        for i in range(len(patient_data)):
+        while current_time <= end_time:
             times_list.append(current_time.strftime('%I:%M %p'))
             current_time += timedelta(minutes=5)
+
+        starting_index = int(start_time.hour * 12 + start_time.minute / 5)
 
         plt.bar(times_list, patient_data)
         plt.title('Patient Data Over Time')
@@ -77,4 +78,4 @@ if __name__ == '__main__':
   print("Average blood-glucose for the day:", day_avg)
 
   # GRAPH PATIENT DATA
-  DataProcessor.draw_patient_graph_day(patient_data)
+  DataProcessor.draw_patient_graph_day(patient_data, 0, 0)
