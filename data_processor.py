@@ -30,6 +30,7 @@ class DataProcessor:
 
     return avg
 
+  @staticmethod
   def get_day_avg(data: list, time_increment=5) -> float:
     """Returns the average blood-glucose level in a given day"""
     interval = (0, 1440)
@@ -37,8 +38,8 @@ class DataProcessor:
     avg = DataProcessor.get_interval_avg(data, interval, time_increment)
 
     return avg
-  
 
+  @staticmethod
   def draw_patient_graph_interval(patient_data: list, start_time: object, end_time: object) -> None:
     """Draws a graph of the given patient's CGM readings over a specified time interval"""
     patient_data = [float(datum) for datum in patient_data]
@@ -78,6 +79,7 @@ class DataProcessor:
 
     plt.show()
 
+  @staticmethod
   def draw_patient_graph_day(patient_data: list) -> None:
     """Draws a graph of the given patient's CGM readings over an entire day"""
     start_time = datetime.strptime('12:00 AM', '%I:%M %p')
@@ -107,4 +109,4 @@ if __name__ == '__main__':
   start_time = datetime.strptime('3:00 PM', '%I:%M %p')
   end_time = datetime.strptime('5:00 PM', '%I:%M %p')
   DataProcessor.draw_patient_graph_interval(patient_data, start_time, end_time)
-  
+
