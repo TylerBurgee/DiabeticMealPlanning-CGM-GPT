@@ -26,7 +26,7 @@ class DataProcessor:
     current_time = start_time
     times_list = []
 
-    while current_time <= end_time:
+    while current_time.time() != end_time.time():
       times_list.append(current_time.strftime('%I:%M %p'))
       current_time += timedelta(minutes=5)
 
@@ -52,7 +52,7 @@ class DataProcessor:
   def get_day_avg(patient_data: list) -> float:
     """Returns the average blood-glucose level in a given day"""
     start_time = datetime.strptime('12:00 PM', '%I:%M %p')
-    end_time = datetime.strptime('11:55 PM', '%I:%M %p')
+    end_time = datetime.strptime('11:55 AM', '%I:%M %p')
 
     avg = DataProcessor.get_interval_avg(patient_data, start_time, end_time)
 
@@ -64,6 +64,7 @@ class DataProcessor:
     patient_data = [float(datum) for datum in patient_data]
     counter = DataProcessor._get_start_count_(start_time)
     times_list = DataProcessor._get_times_list_(start_time, end_time)
+    print(times_list)
     patient_interval_data = []
 
     for i in range(len(times_list)):
@@ -88,7 +89,7 @@ class DataProcessor:
   def draw_patient_graph_day(patient_data: list) -> None:
     """Draws a graph of the given patient's CGM readings over an entire day"""
     start_time = datetime.strptime('12:00 PM', '%I:%M %p')
-    end_time = datetime.strptime('11:55 PM', '%I:%M %p')
+    end_time = datetime.strptime('11:55 AM', '%I:%M %p')
     DataProcessor.draw_patient_graph_interval(patient_data, start_time, end_time)
 
 if __name__ == '__main__':
