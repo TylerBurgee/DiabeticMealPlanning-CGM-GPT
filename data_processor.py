@@ -58,21 +58,30 @@ class DataProcessor:
 
     return avg
 
-  @staticmethod
-  def draw_patient_graph_interval(patient_data: list, start_time: object, end_time: object, tick_factor=12) -> None:
-    """Draws a graph of the given patient's CGM readings over a specified time interval"""
+  def _get_patient_interval_data_(patient_data, start_time, end_time) -> list:
     patient_data = [float(datum) for datum in patient_data]
-    counter = DataProcessor._get_start_count_(start_time)
     times_list = DataProcessor._get_times_list_(start_time, end_time)
-    print(times_list)
+    counter = DataProcessor._get_start_count_(start_time)
     patient_interval_data = []
 
     for i in range(len(times_list)):
       patient_interval_data.append(patient_data[counter+i])
 
+    return patient_interval_data
+
+  @staticmethod
+  def draw_patient_graph_interval(patient_data: list, start_time: object, end_time: object, tick_factor=12) -> None:
+    """Draws a graph of the given patient's CGM readings over a specified time interval"""
+    times_list = DataProcessor._get_times_list_(start_time, end_time)
+    patient_interval_data = []
+
+    for patient in patient_data:
+      patient_interval_data.append(DataProcessor._get_patient_interval_data_(patient, start_time, end_time))
+
     # GRAPH SETUP
     plt.figure(figsize=(12, 4))
-    plt.plot(times_list, patient_interval_data)
+    for patient in patient_interval_data:
+      plt.plot(times_list, patient)
     plt.title('Patient Data Over Time')
     plt.xlabel('Time')
     plt.ylabel('Patient Data')
@@ -101,6 +110,7 @@ if __name__ == '__main__':
 
   # GET DATA FROM A SINGLE PATIENT (ONE DAY)
   patient_data = dh.get_data_by_patient(patient=0, profile=4)
+  patient_data2 = dh.get_data_by_patient(patient=0, profile=3)
 
   # CREATE START AND END TIME OBJECTS
   start_time = datetime.strptime('3:00 PM', '%I:%M %p')
@@ -115,7 +125,7 @@ if __name__ == '__main__':
   print("Average blood-glucose for the day:", day_avg)
 
   # GRAPH PATIENT DATA OVER AN ENTIRE DAY
-  DataProcessor.draw_patient_graph_day(patient_data)
+  DataProcessor.draw_patient_graph_day([patient_data, patient_data2])
 
   # GRAPH PATIENT DATA OVER THE TIME INTERVAL FROM 3:00 PM to 5:00 PM
-  DataProcessor.draw_patient_graph_interval(patient_data, start_time, end_time)
+  DataProcessor.draw_patient_graph_interval([patient_data], start_time, end_time)
