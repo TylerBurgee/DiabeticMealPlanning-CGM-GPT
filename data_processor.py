@@ -27,7 +27,7 @@ class DataProcessor:
     times_list = []
 
     while current_time.time() != end_time.time():
-      times_list.append(current_time.strftime('%I:%M %p'))
+      times_list.append(current_time.strftime('%I:%M\n%p'))
       current_time += timedelta(minutes=5)
 
     return times_list
