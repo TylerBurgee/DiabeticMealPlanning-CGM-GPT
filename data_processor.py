@@ -58,7 +58,7 @@ class DataProcessor:
 
     return avg
 
-  def _get_patient_interval_data_(patient_data, start_time, end_time) -> list:
+  def _get_patient_interval_data_(patient_data: list, start_time: object, end_time: object) -> list:
     patient_data = [float(datum) for datum in patient_data]
     times_list = DataProcessor._get_times_list_(start_time, end_time)
     counter = DataProcessor._get_start_count_(start_time)
@@ -70,18 +70,18 @@ class DataProcessor:
     return patient_interval_data
 
   @staticmethod
-  def draw_patient_graph_interval(patient_data: list, start_time: object, end_time: object, tick_factor=12) -> None:
+  def draw_patient_graph_interval(patients_data: list, start_time: object, end_time: object, tick_factor=12) -> None:
     """Draws a graph of the given patient's CGM readings over a specified time interval"""
     times_list = DataProcessor._get_times_list_(start_time, end_time)
-    patient_interval_data = []
+    patients_interval_data = []
 
-    for patient in patient_data:
-      patient_interval_data.append(DataProcessor._get_patient_interval_data_(patient, start_time, end_time))
+    for patient_data in patients_data:
+      patients_interval_data.append(DataProcessor._get_patient_interval_data_(patient_data, start_time, end_time))
 
     # GRAPH SETUP
     plt.figure(figsize=(12, 4))
-    for patient in patient_interval_data:
-      plt.plot(times_list, patient)
+    for patient_interval_data in patients_interval_data:
+      plt.plot(times_list, patient_interval_data)
     plt.title('Patient Data Over Time')
     plt.xlabel('Time')
     plt.ylabel('Patient Data')
