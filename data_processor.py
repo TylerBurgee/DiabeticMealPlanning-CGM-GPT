@@ -59,7 +59,7 @@ class DataProcessor:
     return avg
 
   @staticmethod
-  def draw_patient_graph_interval(patient_data: list, start_time: object, end_time: object) -> None:
+  def draw_patient_graph_interval(patient_data: list, start_time: object, end_time: object, tick_factor=12) -> None:
     """Draws a graph of the given patient's CGM readings over a specified time interval"""
     patient_data = [float(datum) for datum in patient_data]
     counter = DataProcessor._get_start_count_(start_time)
@@ -78,7 +78,7 @@ class DataProcessor:
     plt.ylabel('Patient Data')
 
     # MAKE X-TICKS VISILE AT EVERY HOUR
-    plt.xticks([time for x,time in enumerate(times_list) if x%12==0])
+    plt.xticks([time for x,time in enumerate(times_list) if x%tick_factor==0])
 
     # REMOVES MARGINS ON X-AXIS
     plt.xlim(times_list[0], times_list[-1])
@@ -100,7 +100,7 @@ if __name__ == '__main__':
   dh = DataHandler(filename)
 
   # GET DATA FROM A SINGLE PATIENT (ONE DAY)
-  patient_data = dh.get_data_by_patient(patient=0, profile=2)
+  patient_data = dh.get_data_by_patient(patient=0, profile=4)
 
   # CREATE START AND END TIME OBJECTS
   start_time = datetime.strptime('3:00 PM', '%I:%M %p')
