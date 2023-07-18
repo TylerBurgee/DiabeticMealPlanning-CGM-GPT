@@ -5,24 +5,32 @@ Date: 11 July 2023
 
 # IMPORT MODULES
 from data_handler import DataHandler
-from data_processor import DataProcessor
 from patient import Patient
 from datetime import datetime, timedelta, time
 from gpt_api import GPT_API
 
 class Main:
 
-    def __init__(self, api_key, org_id):
+    def __init__(self, api_key: str, org_id: str) -> None:
+        """Defines the constructor for a Main object"""
         self.api_key = api_key
         self.org_id = org_id
-        self.gpt = GPT_API(api_key, org_id)
+        self.gpt = GPT_API(self.api_key, self.org_id)
 
-    def blood_glucose_increment_test(self, increment=5):
+    def blood_glucose_increment_test(self):
         """
         Slowly increments blood-glucose level to determine ChatGPT's thresholds
         for what it considers healthly/unhealthy/severe blood-glucose.
         """
-        pass
+        log = []
+
+        for x in range(21):
+            if x % 10 == 0:
+                prompt = "My fasting blood-glucose level is {} mg/dL.".format(x)
+                response = self.gpt.send_prompt(prompt)
+                log.append(("Prompt:", prompt, "Response:", response))
+
+        return log
 
     def instantaneous_blood_glucose_prompt(self, patient: object, meal_inquiry: str) -> str:
         """Sends an instantaneous CGM reading to ChatGPT and requests meal suggestions."""
@@ -43,23 +51,34 @@ class Main:
 
         response = self.gpt.send_prompt(prompt)
 
-        return prompt
+        return response
 
-    def average_blood_glucose_test(self, patient: object):
+    def average_blood_glucose_prompt(self, patient: object) -> str:
         """Sends an average of CGM readings since last meal to ChatGPT and requests meal suggestions."""
         pass
 
 if __name__ == '__main__':
+    # PATIENT CGM DATA FILE
     filename = 'test_db.csv'
+
+    # INSTANTIATE DataHandler OBJECT
     dh = DataHandler(filename)
 
-    api_key = ''
-    org_id = ''
+    # GPT API ACCOUNT INFORMATION
+    api_key = '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'
+    org_id = 'org-cMRrZweyGUcQPXCwXcub7hc9'
 
+    # INSTANTIATE Main OBJECT
     main = Main(api_key, org_id)
 
+    # INSTANTIATE Patient OBJECT
     last_meal_time = datetime.strptime('3:00 PM', '%I:%M %p')
     diabetic_patient = Patient(dh.get_data_by_patient(patient=0, profile=4), last_meal_time=last_meal_time, dietary_restrictions='vegan', budget='20')
 
-    response = main.instantaneous_blood_glucose_prompt(diabetic_patient, 'dinner')
-    print(response)
+    # GET DINNER MEAL RECOMMENDATIONS FOR diabetic_patient
+    #response = main.instantaneous_blood_glucose_prompt(diabetic_patient, 'dinner')
+    #print(response)
+
+    # SEE HOW CHATGPT INTERPRETS BLOOD-GLUCOSE LEVELS
+    #log = main.blood_glucose_increment_test()
+    #print(log)
