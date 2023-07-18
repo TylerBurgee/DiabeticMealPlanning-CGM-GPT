@@ -1,28 +1,24 @@
-"""
-Author: Tyler J. Burgee
-Date: 11 July 2023
-"""
-
 # IMPORT MODULES
 from data_processor import DataProcessor as dp
+from datetime import datetime, timedelta, time
 
 class Patient:
     """Class to represent a Type I Diabetic patient using a CGM monitor"""
 
-    def __init__(self, cgm_data: list, last_meal=0, budget=None, exercise=None, dietary_restrictions=None, medication=None) -> None:
+    def __init__(self, cgm_data: list, last_meal_time=datetime.strptime('12:00 PM', '%I:%M %p'), budget=None, exercise=None, dietary_restrictions=None, medication=None) -> None:
         """Defines the constructor for a Patient object"""
         self.cgm_data = cgm_data
 
         self.dietary_restrictions = dietary_restrictions
         self.medication = medication
 
-        self.last_meal = last_meal
+        self.last_meal_time = last_meal_time
         self.budget = budget
         self.exercise = exercise
 
-    def set_last_meal(self, last_meal: float) -> None:
-        """Sets how long ago a Patient object ate their last meal"""
-        self.last_meal = last_meal
+    def set_last_meal_time(self, last_meal: float) -> None:
+        """Sets the time a Patient object ate their last meal"""
+        self.last_meal_time = last_meal_time
 
     def set_exercise(self, exercise: str) -> None:
         """Sets the exercise a Patient object is about to perform"""
@@ -32,17 +28,42 @@ class Patient:
         """Sets the budget for a Patient object's next meal"""
         self.budget = budget
 
-    def get_instantaneous_blood_glucose(self, time: int) -> float:
+    def get_current_blood_glucose(self, current_time=datetime.now()) -> float:
         """Returns a Patient object's blood-glucose at a specified time"""
-        time_increment = 5
+        # ROUND CURRENT TIME TO NEAREST 5 MINUTES
+        rounded_current_time = (current_time + (datetime.min - current_time) % timedelta(minutes=5))
+        # GET PREVIOUS CGM READING TIME
+        last_reading_time = rounded_current_time - timedelta(minutes=5)
 
-        blood_glucose = dp.get_interval_avg(self.cgm_data, (time, time+time_increment), time_increment)
+        # CONVERT TIME OBJECTS TO FORMATTED STRINGS
+        rounded_current_time = datetime.strftime(rounded_current_time, "%I:%M %p")
+        last_reading_time = datetime.strftime(last_reading_time, "%I:%M %p")
 
-        return blood_glucose
+        # CREATE NEW TIME OBJECTS
+        rounded_current_time = datetime.strptime(rounded_current_time, '%I:%M %p')
+        last_reading_time = datetime.strptime(last_reading_time, "%I:%M %p")
 
-    def get_last_meal(self) -> float:
-        """Returns how long ago a Patient object ate their last meal"""
-        return self.last_meal
+        last_cgm_reading = dp._get_patient_interval_data_(self.cgm_data, last_reading_time, rounded_current_time)[0]
+
+        return last_cgm_reading
+
+    def get_hours_since_last_meal(self, current_time=datetime.now()) -> float:
+        # CONVERT TIME OBJECTS TO FORMATTED STRINGS
+        current_time = datetime.strftime(current_time, "%I:%M %p")
+
+        # CREATE NEW TIME OBJECTS
+        current_time = datetime.strptime(current_time, '%I:%M %p')
+
+        time_difference = current_time - self.get_last_meal_time()
+        days, seconds = time_difference.days, time_difference.seconds
+        minutes_since_last_meal = ((seconds % 3600) // 60) / 60
+        hours_since_last_meal = (days * 24 + seconds // 3600) + minutes_since_last_meal
+
+        return hours_since_last_meal
+
+    def get_last_meal_time(self) -> object:
+        """Returns the last time a Patient object ate their last meal"""
+        return self.last_meal_time
 
     def get_exercise(self) -> str:
         """Returns the exercise a Patient object is performing"""
@@ -67,3 +88,17 @@ class Patient:
     def get_cgm_data(self) -> list:
         """Returns the CGM data from a Patient object"""
         return self.cgm_data
+
+if __name__ == '__main__':
+    from data_handler import DataHandler
+    filename = 'test_db.csv'
+    dh = DataHandler(filename)
+
+    patient_data = dh.get_data_by_patient(patient=0, profile=1)
+    last_meal_time = datetime.strptime('10:00 AM', '%I:%M %p')
+
+    patient = Patient(patient_data, last_meal_time)
+    blood_glucose = patient.get_current_blood_glucose()
+    print("Current blood-glucose:", blood_glucose)
+    hours_since_last_meal = patient.get_hours_since_last_meal()
+    print("Hours since last meal:", hours_since_last_meal)
