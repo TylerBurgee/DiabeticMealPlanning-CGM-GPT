@@ -24,11 +24,11 @@ class Main:
         """
         pass
 
-    def instantaneous_blood_glucose_prompt(self, patient: object):
+    def instantaneous_blood_glucose_prompt(self, patient: object, meal_inquiry: str) -> str:
         """Sends an instantaneous CGM reading to ChatGPT and requests meal suggestions."""
         blood_glucose = 'Blood-glucose: {} mg/dL.\n'.format(patient.get_current_blood_glucose())
         last_meal = 'Last meal: {} hr ago.\n'.format(patient.get_hours_since_last_meal())
-        query = 'Query: Is this safe? If so, recommend meals for breakfast (If blood-glucose is severely low or high, prioritize quickly raising or lowering blood-sugar levels,respectively, before eating a meal); if not, what should I do(prioritize seeking medical attention over remedies)?\n'
+        query = 'Query: Is this safe? If so, recommend meals for {} (If blood-glucose is severely low or high, prioritize quickly raising or lowering blood-sugar levels,respectively, before eating a meal); if not, what should I do(prioritize seeking medical attention over remedies)?\n'.format(meal_inquiry)
 
         prompt = blood_glucose + last_meal + query
 
@@ -43,7 +43,7 @@ class Main:
 
         response = self.gpt.send_prompt(prompt)
 
-        return response
+        return prompt
 
     def average_blood_glucose_test(self, patient: object):
         """Sends an average of CGM readings since last meal to ChatGPT and requests meal suggestions."""
@@ -61,5 +61,5 @@ if __name__ == '__main__':
     last_meal_time = datetime.strptime('3:00 PM', '%I:%M %p')
     diabetic_patient = Patient(dh.get_data_by_patient(patient=0, profile=4), last_meal_time=last_meal_time, dietary_restrictions='vegan', budget='20')
 
-    response = main.instantaneous_blood_glucose_prompt(diabetic_patient)
+    response = main.instantaneous_blood_glucose_prompt(diabetic_patient, 'dinner')
     print(response)
