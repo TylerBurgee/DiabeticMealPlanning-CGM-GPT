@@ -53,8 +53,8 @@ if __name__ == '__main__':
     filename = 'test_db.csv'
     dh = DataHandler(filename)
 
-    api_key = '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'
-    org_id = 'org-cMRrZweyGUcQPXCwXcub7hc9'
+    api_key = ''
+    org_id = ''
 
     main = Main(api_key, org_id)
 
