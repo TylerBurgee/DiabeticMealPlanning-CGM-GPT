@@ -1,5 +1,6 @@
 # IMPORT MODULES
 from tkinter import *
+from datetime import datetime, timedelta
 
 class LoginWindow:
     """Class to represent a login/signup window"""
@@ -11,6 +12,7 @@ class LoginWindow:
         self.window.minsize(size[0], size[1])
 
         self.values_list = []
+        self.patient = None
 
     def add_widgets(self) -> None:
         """Adds widgets to window"""
@@ -58,43 +60,41 @@ class LoginWindow:
         username = self.username1.get(1.0, "end-1c")
         password = self.password1.get(1.0, "end-1c")
 
+        # IF CREDENTIALS ARE VERIFIED, INSTANTIATE AND RETURN PATIENT OBJECT
+        patient = None
+        return patient
+
     def user_signup(self) -> None:
         """Creates new user account with inputted information"""
         # GET INPUTTED DATA
         username = self.username2.get(1.0, "end-1c")
         password = self.password2.get(1.0, "end-1c")
 
-    def get_user(self) -> object:
-        """Returns a verified User object"""
-        return self.user
-
-
-class MealLoggingWindow:
-
-    def __init__(self, dimensions=(600, 400), title="") -> None:
-        self.width = dimensions[0]
-        self.height = dimensions[1]
-        self.window = Tk()
-        self.window.geometry("{}x{}".format(self.width, self.height))
-        self.title = title
-
-    def add_widgets(self) -> None:
-        pass
-
-    def launch(self) -> None:
-        self.window.mainloop()
-
 class MainWindow:
 
-    def __init__(self, dimensions=(600, 400), title="") -> None:
+    def __init__(self, patient: object, dimensions=(600, 400), title="") -> None:
         self.width = dimensions[0]
         self.height = dimensions[1]
         self.window = Tk()
         self.window.geometry("{}x{}".format(self.width, self.height))
         self.title = title
+        self.patient = patient
 
     def add_widgets(self) -> None:
-        pass
+        self.log_meal = Button(self.window, text ="Log Meal Time", command = self.log_meal_time).grid(row=0, column=0)
+        self.get_meal_suggestions = Button(self.window, text ="Request Meal Suggestions", command = self.request_meal_suggestions).grid(row=0, column=1)
+
+    def log_meal_time(self):
+        log_time = datetime.now()
+
+    def request_meal_suggestions(self):
+        meal_planning_window = MealPlanningWindow(self.patient)
+        meal_planning_window.add_widgets()
+        meal_planning_window.launch()
+
+        meal_suggestions = meal_planning_window.meal_suggestions
+
+        messagebox.showinfo(title="Meal Suggestions", message=meal_suggestions, **options)
 
     def launch(self) -> None:
         self.window.mainloop()
@@ -102,12 +102,14 @@ class MainWindow:
 
 class MealPlanningWindow:
 
-    def __init__(self, dimensions=(600, 400), title="") -> None:
+    def __init__(self, patient: object, dimensions=(600, 400), title="") -> None:
         self.width = dimensions[0]
         self.height = dimensions[1]
         self.window = Tk()
         self.window.geometry("{}x{}".format(self.width, self.height))
         self.title = title
+
+        self.meal_suggestions = ""
 
     def add_widgets(self) -> None:
         meal_inquiry_label = Label(self.window, text='Meal Inquiry:')
@@ -130,6 +132,11 @@ class MealPlanningWindow:
         exercise_label.grid(row=3, column=0)
         exercise.grid(row=3, column=1)
 
+        self.get_meal_suggestions = Button(self.window, text ="Request Meal Suggestions", command = self.get_meal_suggestions).grid(row=0, column=0)
+
+    def get_meal_suggestions(self):
+        self.meal_suggestions = ""
+
     def launch(self) -> None:
         self.window.mainloop()
 
@@ -138,6 +145,8 @@ if __name__ == '__main__':
     login_window.add_widgets()
     login_window.launch()
 
-    main_window = MainWindow()
+    patient = login_window.patient
+
+    main_window = MainWindow(patient)
     main_window.add_widgets()
     main_window.launch()
