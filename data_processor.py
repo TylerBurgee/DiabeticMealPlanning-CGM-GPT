@@ -109,23 +109,23 @@ if __name__ == '__main__':
   dh = DataHandler(filename)
 
   # GET DATA FROM A SINGLE PATIENT (ONE DAY)
-  patient_data1 = dh.get_data_by_patient(patient=0, profile=1)
-  patient_data2 = dh.get_data_by_patient(patient=0, profile=2)
-  patient_data3 = dh.get_data_by_patient(patient=0, profile=3)
+  #patient_data1 = dh.get_data_by_patient(patient=0, profile=1)
+  #patient_data2 = dh.get_data_by_patient(patient=0, profile=2)
+  #patient_data3 = dh.get_data_by_patient(patient=0, profile=3)
   patient_data4 = dh.get_data_by_patient(patient=0, profile=4)
 
-  patients_data = [patient_data1, patient_data2, patient_data3, patient_data4]
+  patients_data = [patient_data4]
 
   # CREATE START AND END TIME OBJECTS
   start_time = datetime.strptime('3:00 PM', '%I:%M %p')
   end_time = datetime.strptime('5:00 PM', '%I:%M %p')
 
   # GET THE AVERAGE BLOOD-GLUCOSE LEVEL FROM 3:00 PM to 5:00 PM
-  interval_avg = DataProcessor.get_interval_avg(patient_data1, start_time, end_time)
-  print("Average blood-glucose from 3:00 PM to 5:00 PM:", interval_avg)
+  interval_avg = DataProcessor.get_interval_avg(patient_data4, start_time, end_time)
+  print("Average blood-glucose:", interval_avg)
 
   # GET THE AVERAGE BLOOD-GLUCOSE LEVEL OVER AN ENTIRE DAY
-  day_avg = DataProcessor.get_day_avg(patient_data1)
+  day_avg = DataProcessor.get_day_avg(patient_data4)
   print("Average blood-glucose for the day:", day_avg)
 
   # GRAPH PATIENT DATA OVER AN ENTIRE DAY
