@@ -69,7 +69,7 @@ class LoginWindow:
         return self.user
 
 
-class SetupWindow:
+class MealLoggingWindow:
 
     def __init__(self, dimensions=(600, 400), title="") -> None:
         self.width = dimensions[0]
