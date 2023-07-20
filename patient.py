@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, time
 class Patient:
     """Class to represent a Type I Diabetic patient using a CGM monitor"""
 
-    def __init__(self, cgm_data: list, last_meal_time=datetime.strptime('12:00 PM', '%I:%M %p'), budget=None, exercise=None, dietary_restrictions=None, medication=None) -> None:
+    def __init__(self, cgm_data: list, last_meal_time: object, budget="", exercise="", dietary_restrictions="", medication="") -> None:
         """Defines the constructor for a Patient object"""
         self.cgm_data = cgm_data
 
@@ -29,7 +29,7 @@ class Patient:
         self.budget = budget
 
     def get_current_blood_glucose(self, current_time=datetime.now()) -> float:
-        """Returns a Patient object's blood-glucose at a specified time"""
+        """Returns a Patient object's blood-glucose at the current time"""
         # ROUND CURRENT TIME TO NEAREST 5 MINUTES
         rounded_current_time = (current_time + (datetime.min - current_time) % timedelta(minutes=5))
         # GET PREVIOUS CGM READING TIME
@@ -43,11 +43,56 @@ class Patient:
         rounded_current_time = datetime.strptime(rounded_current_time, '%I:%M %p')
         last_reading_time = datetime.strptime(last_reading_time, "%I:%M %p")
 
-        last_cgm_reading = dp._get_patient_interval_data_(self.cgm_data, last_reading_time, rounded_current_time)[0]
+        last_cgm_reading = dp.get_patient_interval_data(self.cgm_data, last_reading_time, rounded_current_time)[0]
 
         return last_cgm_reading
 
+    def get_blood_glucose_at_time(self, time: object) -> float:
+        """Returns a Patient object's blood-glucose at the specified time"""
+        # ROUND CURRENT TIME TO NEAREST 5 MINUTES
+        rounded_time = (time + (datetime.min - time) % timedelta(minutes=5))
+        # GET PREVIOUS CGM READING TIME
+        last_reading_time = rounded_time - timedelta(minutes=5)
+
+        # CONVERT TIME OBJECTS TO FORMATTED STRINGS
+        rounded_time = datetime.strftime(rounded_time, "%I:%M %p")
+        last_reading_time = datetime.strftime(last_reading_time, "%I:%M %p")
+
+        # CREATE NEW TIME OBJECTS
+        rounded_time = datetime.strptime(rounded_time, '%I:%M %p')
+        last_reading_time = datetime.strptime(last_reading_time, "%I:%M %p")
+
+        cgm_reading = dp.get_patient_interval_data(self.cgm_data, last_reading_time, rounded_time)[0]
+
+        return cgm_reading
+
+    def get_avg_blood_glucose_last_meal(self):
+        """
+        Returns the average blood-glucose level from the time a Patient object
+        ate their last meal, until now.
+        """
+        current_time=datetime.now()
+
+        # ROUND CURRENT TIME TO NEAREST 5 MINUTES
+        rounded_current_time = (current_time + (datetime.min - current_time) % timedelta(minutes=5))
+        # GET LAST CGM READING TIME
+        last_reading_time = rounded_current_time + timedelta(minutes=5)
+
+        # CONVERT TIME OBJECT TO FORMATTED STRING
+        last_reading_time = datetime.strftime(last_reading_time, "%I:%M %p")
+
+        # CREATE NEW TIME OBJECT
+        last_reading_time = datetime.strptime(last_reading_time, "%I:%M %p")
+
+        avg = dp.get_interval_avg(self.cgm_data, self.get_last_meal_time(), last_reading_time)
+
+        return avg
+
     def get_hours_since_last_meal(self, current_time=datetime.now()) -> float:
+        """
+        Returns number of hours between now and the time a Patient object
+        ate their last meal.
+        """
         # CONVERT TIME OBJECTS TO FORMATTED STRINGS
         current_time = datetime.strftime(current_time, "%I:%M %p")
 
@@ -62,8 +107,14 @@ class Patient:
         return hours_since_last_meal
 
     def get_last_meal_time(self) -> object:
-        """Returns the last time a Patient object ate their last meal"""
+        """Returns the time a Patient object ate their last meal"""
         return self.last_meal_time
+
+    def get_last_meal_time_str(self) -> str:
+        """Returns the time a Patient object ate their last meal, in string format"""
+        last_meal_time = datetime.strftime(self.last_meal_time, "%I:%M %p")
+
+        return last_meal_time
 
     def get_exercise(self) -> str:
         """Returns the exercise a Patient object is performing"""
