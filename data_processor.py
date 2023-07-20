@@ -58,7 +58,7 @@ class DataProcessor:
 
     return avg
 
-  def _get_patient_interval_data_(patient_data: list, start_time: object, end_time: object) -> list:
+  def get_patient_interval_data(patient_data: list, start_time: object, end_time: object) -> list:
     patient_data = [float(datum) for datum in patient_data]
     times_list = DataProcessor._get_times_list_(start_time, end_time)
     counter = DataProcessor._get_start_count_(start_time)
@@ -76,7 +76,7 @@ class DataProcessor:
     patients_interval_data = []
 
     for patient_data in patients_data:
-      patients_interval_data.append(DataProcessor._get_patient_interval_data_(patient_data, start_time, end_time))
+      patients_interval_data.append(DataProcessor.get_patient_interval_data(patient_data, start_time, end_time))
 
     # GRAPH SETUP
     plt.figure(figsize=(12, 4))
@@ -112,13 +112,13 @@ if __name__ == '__main__':
   #patient_data1 = dh.get_data_by_patient(patient=0, profile=1)
   #patient_data2 = dh.get_data_by_patient(patient=0, profile=2)
   #patient_data3 = dh.get_data_by_patient(patient=0, profile=3)
-  patient_data4 = dh.get_data_by_patient(patient=0, profile=4)
+  patient_data4 = dh.get_data_by_patient(patient=9, profile=4)
 
   patients_data = [patient_data4]
 
   # CREATE START AND END TIME OBJECTS
-  start_time = datetime.strptime('3:00 PM', '%I:%M %p')
-  end_time = datetime.strptime('5:00 PM', '%I:%M %p')
+  start_time = datetime.strptime('10:00 PM', '%I:%M %p')
+  end_time = datetime.strptime('5:30 AM', '%I:%M %p')
 
   # GET THE AVERAGE BLOOD-GLUCOSE LEVEL FROM 3:00 PM to 5:00 PM
   interval_avg = DataProcessor.get_interval_avg(patient_data4, start_time, end_time)
