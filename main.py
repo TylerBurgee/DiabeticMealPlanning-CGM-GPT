@@ -35,9 +35,9 @@ class Main:
         """Sends an instantaneous CGM reading to ChatGPT and requests meal suggestions."""
         current_blood_glucose = 'Current blood-glucose: {} mg/dL.\n'.format(patient.get_current_blood_glucose())
         start_blood_glucose = 'Blood-glucose at {}: {}.\n'.format(patient.get_last_meal_time_str(), patient.get_blood_glucose_at_time(patient.get_last_meal_time()))
-        avg_blood_glucose = 'Average blood-glucose since last meal: {}.\n'.format(patient.get_avg_blood_glucose_last_meal())
-        min_blood_glucose = 'Minimum blood-glucose since last meal: {}.\n'.format(patient.get_min_blood_glucose_last_meal())
-        max_blood_glucose = 'Maximum blood-glucose since last meal: {}.\n'.format(patient.get_max_blood_glucose_last_meal())
+        avg_blood_glucose = 'Average blood-glucose since last meal: {} mg/dL.\n'.format(patient.get_avg_blood_glucose_last_meal())
+        min_blood_glucose = 'Minimum blood-glucose since last meal: {} mg/dL.\n'.format(patient.get_min_blood_glucose_last_meal())
+        max_blood_glucose = 'Maximum blood-glucose since last meal: {} mg/dL.\n'.format(patient.get_max_blood_glucose_last_meal())
         last_meal = 'Last meal: {} hr ago.\n'.format(patient.get_hours_since_last_meal())
         query = 'Query: Is this safe? If so, recommend meals for {} (If blood-glucose is severely low or high, prioritize quickly raising or lowering blood-sugar levels,respectively, before eating a meal); if not, what should I do(prioritize seeking medical attention over remedies)?\n'.format(meal_inquiry)
 
@@ -52,9 +52,11 @@ class Main:
         if patient.get_medication() != "":
             prompt += 'Medication: {}.\n'.format(patient.get_medication())
 
-        response = self.gpt.send_prompt(prompt)
+        #response = self.gpt.send_prompt(prompt)
 
-        return response
+        print(prompt)
+
+        #return response
 
 if __name__ == '__main__':
     # PATIENT CGM DATA FILE
