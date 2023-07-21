@@ -58,7 +58,9 @@ class DataProcessor:
 
     return avg
 
+  @staticmethod
   def get_patient_interval_data(patient_data: list, start_time: object, end_time: object) -> list:
+    """Returns patient CGM data within a specified time interval"""
     patient_data = [float(datum) for datum in patient_data]
     times_list = DataProcessor._get_times_list_(start_time, end_time)
     counter = DataProcessor._get_start_count_(start_time)
@@ -68,6 +70,22 @@ class DataProcessor:
       patient_interval_data.append(patient_data[counter+i])
 
     return patient_interval_data
+
+  @staticmethod
+  def get_patient_interval_data_max(patient_data: list, start_time: object, end_time: object) -> float:
+    """Returns patient's maximum CGM reading within a specified time interval"""
+    patient_interval_data = DataProcessor.get_patient_interval_data(patient_data, start_time, end_time)
+    max_reading = max(patient_interval_data)
+
+    return max_reading
+
+  @staticmethod
+  def get_patient_interval_data_min(patient_data: list, start_time: object, end_time: object) -> float:
+    """Returns patient's minimum CGM reading within a specified time interval"""
+    patient_interval_data = DataProcessor.get_patient_interval_data(patient_data, start_time, end_time)
+    min_reading = min(patient_interval_data)
+
+    return min_reading
 
   @staticmethod
   def draw_patient_graph_interval(patients_data: list, start_time: object, end_time: object, tick_factor=12) -> None:
