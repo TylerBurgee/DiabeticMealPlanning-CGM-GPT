@@ -32,7 +32,7 @@ class Main:
         return log
 
     def get_meal_suggestions(self, patient: object, meal_inquiry: str) -> str:
-        """Sends an instantaneous CGM reading to ChatGPT and requests meal suggestions."""
+        """Sends Patient CGM information to ChatGPT and requests meal suggestions"""
         current_blood_glucose = 'Current blood-glucose: {} mg/dL.\n'.format(patient.get_current_blood_glucose())
         start_blood_glucose = 'Blood-glucose at {}: {}.\n'.format(patient.get_last_meal_time_str(), patient.get_blood_glucose_at_time(patient.get_last_meal_time()))
         avg_blood_glucose = 'Average blood-glucose since last meal: {} mg/dL.\n'.format(patient.get_avg_blood_glucose_last_meal())
