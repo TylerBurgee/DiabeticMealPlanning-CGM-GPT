@@ -52,11 +52,9 @@ class Main:
         if patient.get_medication() != "":
             prompt += 'Medication: {}.\n'.format(patient.get_medication())
 
-        #response = self.gpt.send_prompt(prompt)
+        response = self.gpt.send_prompt(prompt)
 
-        print(prompt)
-
-        #return response
+        return response
 
 if __name__ == '__main__':
     # PATIENT CGM DATA FILE
