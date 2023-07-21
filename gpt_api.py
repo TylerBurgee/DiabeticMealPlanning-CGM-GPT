@@ -1,3 +1,7 @@
+"""
+Author: Tyler J. Burgee
+"""
+
 # IMPORT MODULES
 import openai
 
