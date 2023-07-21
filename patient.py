@@ -1,3 +1,7 @@
+"""
+Author: Tyler J. Burgee
+"""
+
 # IMPORT MODULES
 from data_processor import DataProcessor as dp
 from datetime import datetime, timedelta, time
@@ -28,8 +32,9 @@ class Patient:
         """Sets the budget for a Patient object's next meal"""
         self.budget = budget
 
-    def get_current_blood_glucose(self, current_time=datetime.now()) -> float:
+    def get_current_blood_glucose(self) -> float:
         """Returns a Patient object's blood-glucose at the current time"""
+        current_time=datetime.now()
         # ROUND CURRENT TIME TO NEAREST 5 MINUTES
         rounded_current_time = (current_time + (datetime.min - current_time) % timedelta(minutes=5))
         # GET PREVIOUS CGM READING TIME
@@ -87,6 +92,50 @@ class Patient:
         avg = dp.get_interval_avg(self.cgm_data, self.get_last_meal_time(), last_reading_time)
 
         return avg
+
+    def get_max_blood_glucose_last_meal(self):
+        """
+        Returns the maximum blood-glucose level from the time a Patient object
+        ate their last meal, until now.
+        """
+        current_time=datetime.now()
+
+        # ROUND CURRENT TIME TO NEAREST 5 MINUTES
+        rounded_current_time = (current_time + (datetime.min - current_time) % timedelta(minutes=5))
+        # GET LAST CGM READING TIME
+        last_reading_time = rounded_current_time + timedelta(minutes=5)
+
+        # CONVERT TIME OBJECT TO FORMATTED STRING
+        last_reading_time = datetime.strftime(last_reading_time, "%I:%M %p")
+
+        # CREATE NEW TIME OBJECT
+        last_reading_time = datetime.strptime(last_reading_time, "%I:%M %p")
+
+        max_reading = dp.get_patient_interval_data_max(self.cgm_data, self.get_last_meal_time(), last_reading_time)
+
+        return max_reading
+
+    def get_min_blood_glucose_last_meal(self):
+        """
+        Returns the minimum blood-glucose level from the time a Patient object
+        ate their last meal, until now.
+        """
+        current_time=datetime.now()
+
+        # ROUND CURRENT TIME TO NEAREST 5 MINUTES
+        rounded_current_time = (current_time + (datetime.min - current_time) % timedelta(minutes=5))
+        # GET LAST CGM READING TIME
+        last_reading_time = rounded_current_time + timedelta(minutes=5)
+
+        # CONVERT TIME OBJECT TO FORMATTED STRING
+        last_reading_time = datetime.strftime(last_reading_time, "%I:%M %p")
+
+        # CREATE NEW TIME OBJECT
+        last_reading_time = datetime.strptime(last_reading_time, "%I:%M %p")
+
+        min_reading = dp.get_patient_interval_data_min(self.cgm_data, self.get_last_meal_time(), last_reading_time)
+
+        return min_reading
 
     def get_hours_since_last_meal(self, current_time=datetime.now()) -> float:
         """
