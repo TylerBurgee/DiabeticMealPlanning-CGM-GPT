@@ -64,8 +64,8 @@ if __name__ == '__main__':
     dh = DataHandler(filename)
 
     # GPT API ACCOUNT INFORMATION
-    api_key = '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'
-    org_id = 'org-cMRrZweyGUcQPXCwXcub7hc9'
+    api_key = ''
+    org_id = ''
 
     # INSTANTIATE Main OBJECT
     main = Main(api_key, org_id)
